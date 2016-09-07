@@ -8,6 +8,10 @@
     "test": "mocha test",
     "prepublish": "npm run build"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/use-strict/webpack-runner.git"
+  },
   "author": "Alexandru Ciuca",
   "license": "MIT",
   "peerDependencies": {
