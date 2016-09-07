@@ -1,0 +1,23 @@
+{
+  "name": "webpack-runner",
+  "version": "1.0.0",
+  "description": "Webpack build wrapper with formatted and normalized error output",
+  "bin": "bin/webpack-runner",
+  "scripts": {
+    "build": "./node_modules/.bin/tsc -p ./src",
+    "test": "mocha test",
+    "prepublish": "npm run build"
+  },
+  "author": "Alexandru Ciuca",
+  "license": "MIT",
+  "peerDependencies": {
+    "webpack": "^1.9.11"
+  },
+  "devDependencies": {
+    "mocha": "^3.0.2",
+    "typescript": "^2.0.2"
+  },
+  "dependencies": {
+    "node-getopt": "^0.2.3"
+  }
+}
