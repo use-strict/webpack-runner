@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/use-strict/webpack-runner.svg?branch=master)](https://travis-ci.org/use-strict/webpack-runner)
+
 # Introduction
 
 Webpack runner is a simple CLI tool that acts as a webpack build wrapper.
