@@ -49,6 +49,9 @@ if (isWatchMode) {
         this.plugin("done", function(stats: any) {
             process.stdout.write("Build finished. (" + (stats.endTime - stats.startTime) + "ms)\n");
         });
+        this.plugin("failed", function(error: any) {
+            process.stdout.write("Build finished. (0ms)\n");
+        });
     };
     config.plugins = config.plugins || [];
     config.plugins.push(outputPlugin);
@@ -66,7 +69,7 @@ config.ts.silent = true;
 
 webpack(config, (err, stats) => {
     if (err) {
-        process.stderr.write(formatGeneralError(configPath, 1, 1, err.message) + "\n");
+        process.stdout.write(formatGeneralError(configPath, 1, 1, err.message) + "\n");
         process.exit(1);
     }
 

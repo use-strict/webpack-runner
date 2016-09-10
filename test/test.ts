@@ -16,7 +16,7 @@ describe('webpack-runner', () => {
         let expectedCode = 1;
 
         exec(runnerExec, (e, stdout, stderr) => {
-            assert.notEqual(null, stderr.match(expectedStderr), "Unexpected output: " + stderr);
+            assert.notEqual(null, stderr.match(expectedStderr), "Unexpected stderr: " + stderr);
             assert.equal(expectedStdout, stdout);
             assert.equal((e as any).code, expectedCode);
             done();
@@ -28,7 +28,7 @@ describe('webpack-runner', () => {
         let expectedStdout = "";
         let expectedCode = 1;
         exec(runnerExecWithConfig("./dummy"), (e, stdout, stderr) => {
-            assert.notEqual(null, stderr.match(expectedStderr), "Unexpected output: " + stderr);
+            assert.notEqual(null, stderr.match(expectedStderr), "Unexpected stderr: " + stderr);
             assert.equal(expectedStdout, stdout);
             assert.equal((e as any).code, expectedCode);
             done();
@@ -41,7 +41,7 @@ describe('webpack-runner', () => {
         //let expectedCode = 0;
 
         exec(runnerExecWithConfig("./data/success/webpack.config.js"), (e, stdout, stderr) => {
-            assert.notEqual(null, stderr.match(expectedStderr), "Unexpected output: " + stderr);
+            assert.notEqual(null, stderr.match(expectedStderr), "Unexpected stderr: " + stderr);
             assert.equal(expectedStdout, stdout);
             assert.equal(null, e);
             done();
@@ -54,9 +54,35 @@ describe('webpack-runner', () => {
         //let expectedCode = 0;
 
         exec(runnerExecWithConfig("./data/success/webpack.config.js") + " --watch", (e, stdout, stderr) => {
-            assert.notEqual(null, stderr.match(expectedStderr), "Unexpected output: " + stderr);
-            assert.notEqual(null, stdout.match(expectedStdout), "Unexpected output: " + stdout);
+            assert.notEqual(null, stderr.match(expectedStderr), "Unexpected stderr: " + stderr);
+            assert.notEqual(null, stdout.match(expectedStdout), "Unexpected stdout: " + stdout);
             assert.equal(null, e);
+            done();
+        });
+    });
+
+    it("should output fatal webpack errors", (done) => {
+        let expectedStderr = /^$/;
+        let expectedStdout = /^[^(]+\(1,1\): error WEBPACK: ([^\n]+)\n$/;
+        let expectedCode = 1;
+
+        exec(runnerExecWithConfig("./data/fatal-webpack-error/webpack.config.js"), (e, stdout, stderr) => {
+            assert.notEqual(null, stderr.match(expectedStderr), "Unexpected stderr: " + stderr);
+            assert.notEqual(null, stdout.match(expectedStdout), "Unexpected stdout: " + stdout);
+            assert.equal((e as any).code, expectedCode);
+            done();
+        });
+    });
+
+    it("should output fatal webpack errors in watch mode", (done) => {
+        let expectedStderr = /^$/;
+        let expectedStdout = /^Build started.\nBuild finished. \(\d+ms\)\n[^(]+\(1,1\): error WEBPACK: ([^\n]+)\n$/;
+        let expectedCode = 1;
+
+        exec(runnerExecWithConfig("./data/fatal-webpack-error/webpack.config.js") + " --watch", (e, stdout, stderr) => {
+            assert.notEqual(null, stderr.match(expectedStderr), "Unexpected stderr: " + stderr);
+            assert.notEqual(null, stdout.match(expectedStdout), "Unexpected stdout: " + stdout);
+            assert.equal((e as any).code, expectedCode);
             done();
         });
     });
