@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.2.0
+
+- Added support for webpack 2 beta
+
 ## v1.1.0
 
 - Fixed formatting of ModuleParseError webpack errors
