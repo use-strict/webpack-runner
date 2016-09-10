@@ -4,3 +4,7 @@ node_js:
 sudo: false
 install:
   - npm install
+  - npm install $WEBPACK
+env:
+  - WEBPACK=webpack@latest
+  - WEBPACK=webpack@beta

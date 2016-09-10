@@ -79,8 +79,7 @@ describe('webpack-runner', () => {
         watch: true,
         expected: {
             stderr: /^$/,
-            stdout: /^Build started.\nBuild finished. \(\d+ms\)\n$/,
-            code: 0
+            stdout: /^Build started.\nBuild finished. \(\d+ms\)\n$/
         }
     }));
 
@@ -109,7 +108,7 @@ describe('webpack-runner', () => {
         watch: false,
         expected: {
             stderr: /^$/,
-            stdout: /^[^(]+\(1,18\): error WEBPACK: Error: Cannot resolve \'file\' or \'directory\' \.\/non-existent ([^\n]+)\n[^(]+\(2,19\): error WEBPACK: Error: Cannot resolve \'file\' or \'directory\' \.\/other-missing ([^\n]+)\n$/,
+            stdout: /^[^(]+\(1,18\): error WEBPACK: Error: Can(no|')t resolve (\'file\' or \'directory\' )?'?\.\/non-existent'? ([^\n]+)\n[^(]+\(2,19\): error WEBPACK: Error: Can(no|')t resolve (\'file\' or \'directory\' )?'?\.\/other-missing'? ([^\n]+)\n$/,
             code: 1
         }
     }));
@@ -119,7 +118,7 @@ describe('webpack-runner', () => {
         watch: true,
         expected: {
             stderr: /^$/,
-            stdout: /^Build started.\nBuild finished. \(\d+ms\)\n[^(]+\(1,18\): error WEBPACK: Error: Cannot resolve \'file\' or \'directory\' \.\/non-existent ([^\n]+)\n[^(]+\(2,19\): error WEBPACK: Error: Cannot resolve \'file\' or \'directory\' \.\/other-missing ([^\n]+)\n$/
+            stdout: /^Build started.\nBuild finished. \(\d+ms\)\n[^(]+\(1,18\): error WEBPACK: Error: Can(no|')t resolve (\'file\' or \'directory\' )?'?\.\/non-existent'? ([^\n]+)\n[^(]+\(2,19\): error WEBPACK: Error: Can(no|')t resolve (\'file\' or \'directory\' )?\'?.\/other-missing'? ([^\n]+)\n$/
         }
     }));
 
@@ -138,7 +137,7 @@ describe('webpack-runner', () => {
         watch: false,
         expected: {
             stderr: /^$/,
-            stdout: /^[^(]+\(1,1\): error WEBPACK: Module not found: Error: Cannot resolve \'file\' or \'directory\' \.\/non-existent ([^\n]+)\n$/,
+            stdout: /^[^(]+\(1,1\): error WEBPACK: Module not found: Error: Can(no|')t resolve (\'file\' or \'directory\' )?'?\.\/non-existent'? ([^\n]+)\n$/,
             code: 1
         }
     }));
