@@ -8,7 +8,8 @@ interface TestOptions {
     expected: {
         stdout: RegExp,
         stderr: RegExp,
-        code: number
+        /** Expected exit code, or null in watch mode (should only exit by exec timeout) */
+        code?: number
     }
 }
 
@@ -22,13 +23,18 @@ let createTest = (options: TestOptions) => (done: MochaDone) => {
         runnerExec += " --watch";
     }
     let {expected} = options;
-    exec(runnerExec, (e, stdout, stderr) => {
+    let runner = exec(runnerExec, {timeout: 1900, killSignal: "SIGTERM"}, (e, stdout, stderr) => {
         assert.notEqual(null, stderr.match(expected.stderr), `Unexpected stderr: "${stderr}"`);
         assert.notEqual(null, stdout.match(expected.stdout), `Unexpected stdout: "${stdout}"`);
-        if (expected.code !== 0) {
-            assert.equal((e as any).code, expected.code);
+        if (expected.code !== void 0) {
+            if (expected.code !== 0) {
+                assert.equal((e as any).code, expected.code);
+            } else {
+                assert.equal(null, e);
+            }
         } else {
-            assert.equal(null, e);
+            assert((options.watch && e !== null && (e as any).signal === 'SIGTERM'),
+                "webpack-runner exited before it could be killed by the test runner");
         }
         done();
     });
@@ -92,6 +98,25 @@ describe('webpack-runner', () => {
             stderr: /^$/,
             stdout: /^Build started.\nBuild finished. \(\d+ms\)\n[^(]+\(1,1\): error WEBPACK: ([^\n]+)\n$/,
             code: 1
+        }
+    }));
+
+    it ("should output webpack module errors", createTest({
+        webpackConfigPath: "./data/module-errors/webpack.config.js",
+        watch: false,
+        expected: {
+            stderr: /^$/,
+            stdout: /^[^(]+\(1,18\): error WEBPACK: Error: Cannot resolve \'file\' or \'directory\' \.\/non-existent ([^\n]+)\n[^(]+\(2,19\): error WEBPACK: Error: Cannot resolve \'file\' or \'directory\' \.\/other-missing ([^\n]+)\n$/,
+            code: 1
+        }
+    }));
+
+    it ("should output webpack module errors in watch mode", createTest({
+        webpackConfigPath: "./data/module-errors/webpack.config.js",
+        watch: true,
+        expected: {
+            stderr: /^$/,
+            stdout: /^Build started.\nBuild finished. \(\d+ms\)\n[^(]+\(1,18\): error WEBPACK: Error: Cannot resolve \'file\' or \'directory\' \.\/non-existent ([^\n]+)\n[^(]+\(2,19\): error WEBPACK: Error: Cannot resolve \'file\' or \'directory\' \.\/other-missing ([^\n]+)\n$/
         }
     }));
 });
