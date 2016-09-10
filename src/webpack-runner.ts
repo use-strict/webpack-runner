@@ -23,16 +23,11 @@ let opt = getopt
 
 if (!opt.options['config']) {
     process.stderr.write("Missing required --config option\n\n");
-    getopt.showHelp();
+    process.stderr.write(getopt.getHelp());
     process.exit(1);
 }
 
 let configPath = path.resolve(opt.options['config']);
-if (!fs.statSync(configPath).isFile()) {
-    process.stderr.write(`Config file "${configPath}" not found.\n`);
-    process.exit(1);
-}
-
 let isWatchMode = !!opt.options['watch'];
 let isProfile = !!opt.options['profile'];
 let profilePath = isProfile ? path.resolve(opt.options['profile']) : void 0;
@@ -41,7 +36,7 @@ let config: WebpackConfig;
 try {
     config = require(configPath);
 } catch (e) {
-    process.stderr.write(`Couldn't open webpack config file ${configPath}.\n`);
+    process.stderr.write(`Couldn't open webpack config file "${configPath}".\n`);
     process.exit(1);
 }
 

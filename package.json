@@ -5,6 +5,7 @@
   "bin": "bin/webpack-runner",
   "scripts": {
     "build": "./node_modules/.bin/tsc -p ./src",
+    "pretest": "./node_modules/.bin/tsc -p ./test && npm run build",
     "test": "mocha test",
     "prepublish": "npm run build"
   },
@@ -18,8 +19,11 @@
     "webpack": "^1.9.11"
   },
   "devDependencies": {
+    "cross-env": "^2.0.1",
     "mocha": "^3.0.2",
-    "typescript": "^2.0.2"
+    "typescript": "^2.0.2",
+    "typings": "^1.3.3",
+    "webpack": "^1.13.2"
   },
   "dependencies": {
     "node-getopt": "^0.2.3"
