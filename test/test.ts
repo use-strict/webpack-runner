@@ -101,8 +101,8 @@ describe('webpack-runner', () => {
         }
     }));
 
-    it ("should output webpack module errors", createTest({
-        webpackConfigPath: "./data/module-errors/webpack.config.js",
+    it("should output webpack not found module errors", createTest({
+        webpackConfigPath: "./data/module-not-found-errors/webpack.config.js",
         watch: false,
         expected: {
             stderr: /^$/,
@@ -111,8 +111,8 @@ describe('webpack-runner', () => {
         }
     }));
 
-    it ("should output webpack module errors in watch mode", createTest({
-        webpackConfigPath: "./data/module-errors/webpack.config.js",
+    it("should output webpack module not found errors in watch mode", createTest({
+        webpackConfigPath: "./data/module-not-found-errors/webpack.config.js",
         watch: true,
         expected: {
             stderr: /^$/,
@@ -120,12 +120,22 @@ describe('webpack-runner', () => {
         }
     }));
 
-    it ("should output webpack module parse errors", createTest({
+    it("should output webpack module parse errors", createTest({
         webpackConfigPath: "./data/module-parse-errors/webpack.config.js",
         watch: false,
         expected: {
             stderr: /^$/,
             stdout: /^[^(]+\(2,7\): error WEBPACK: SyntaxError: Unexpected token \(2:7\)\n$/,
+            code: 1
+        }
+    }));
+
+    it("should output webpack module build errors", createTest({
+        webpackConfigPath: "./data/module-build-errors/webpack.config.js",
+        watch: false,
+        expected: {
+            stderr: /^$/,
+            stdout: /^[^(]+\(1,1\): error WEBPACK: Module not found: Error: Cannot resolve \'file\' or \'directory\' \.\/non-existent ([^\n]+)\n$/,
             code: 1
         }
     }));
