@@ -13,7 +13,7 @@ interface TestOptions {
     }
 }
 
-let createTest = (options: TestOptions) => (done: MochaDone) => {
+let createTest = (options: TestOptions) => function(done: MochaDone) {
     let runnerExec = `node "${path.resolve(__dirname, "../bin/webpack-runner")}"`;
     if (options.webpackConfigPath) {
         let realPath = path.resolve(__dirname, options.webpackConfigPath);
@@ -23,7 +23,9 @@ let createTest = (options: TestOptions) => (done: MochaDone) => {
         runnerExec += " --watch";
     }
     let {expected} = options;
+    // Smaller timeout in watch mode, because we expect the process will always timeout
     let timeout = options.watch ? 2000 : 10000;
+    this.timeout(timeout);
     let runner = exec(runnerExec, {timeout: timeout - 100, killSignal: "SIGTERM"}, (e, stdout, stderr) => {
         assert.notEqual(null, stderr.match(expected.stderr), `Unexpected stderr: "${stderr}"`);
         assert.notEqual(null, stdout.match(expected.stdout), `Unexpected stdout: "${stdout}"`);

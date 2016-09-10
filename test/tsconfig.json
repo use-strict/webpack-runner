@@ -3,7 +3,6 @@
         "target": "es5",
         "module": "commonjs",
         "noImplicitAny": true,
-        "noImplicitThis": true,
         "noImplicitReturns": true
     },
     "exclude": [
