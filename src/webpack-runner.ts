@@ -36,7 +36,7 @@ let config: WebpackConfig;
 try {
     config = require(configPath);
 } catch (e) {
-    process.stderr.write(`Couldn't open webpack config file "${configPath}".\n`);
+    process.stderr.write(`Couldn't open webpack config file "${configPath}". ${e.stack}\n`);
     process.exit(1);
 }
 

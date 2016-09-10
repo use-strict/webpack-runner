@@ -23,7 +23,8 @@ let createTest = (options: TestOptions) => (done: MochaDone) => {
         runnerExec += " --watch";
     }
     let {expected} = options;
-    let runner = exec(runnerExec, {timeout: 1900, killSignal: "SIGTERM"}, (e, stdout, stderr) => {
+    let timeout = options.watch ? 2000 : 10000;
+    let runner = exec(runnerExec, {timeout: timeout - 100, killSignal: "SIGTERM"}, (e, stdout, stderr) => {
         assert.notEqual(null, stderr.match(expected.stderr), `Unexpected stderr: "${stderr}"`);
         assert.notEqual(null, stdout.match(expected.stdout), `Unexpected stdout: "${stdout}"`);
         if (expected.code !== void 0) {
@@ -55,7 +56,7 @@ describe('webpack-runner', () => {
         webpackConfigPath: "./dummy",
         watch: false,
         expected: {
-            stderr: /^Couldn't open webpack config file "([^"]+)".\n$/,
+            stderr: /^Couldn't open webpack config file "([^"]+)"./,
             stdout: /^$/,
             code: 1
         }
@@ -136,6 +137,16 @@ describe('webpack-runner', () => {
         expected: {
             stderr: /^$/,
             stdout: /^[^(]+\(1,1\): error WEBPACK: Module not found: Error: Cannot resolve \'file\' or \'directory\' \.\/non-existent ([^\n]+)\n$/,
+            code: 1
+        }
+    }));
+
+    it("should output ts-loader errors", createTest({
+        webpackConfigPath: "./data/ts-loader-errors/webpack.config.js",
+        watch: false,
+        expected: {
+            stderr: /^$/,
+            stdout: /^[^(]+\(2,9\): error TS2322: Type 'number' is not assignable to type 'string'.\n$/,
             code: 1
         }
     }));
