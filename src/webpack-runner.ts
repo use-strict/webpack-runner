@@ -50,6 +50,7 @@ if (isWatchMode) {
             process.stdout.write("Build finished. (" + (stats.endTime - stats.startTime) + "ms)\n");
         });
     };
+    config.plugins = config.plugins || [];
     config.plugins.push(outputPlugin);
 }
 

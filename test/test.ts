@@ -47,4 +47,17 @@ describe('webpack-runner', () => {
             done();
         });
     });
+
+    it("should output only the start/stop markers in watch mode if successful", (done) => {
+        let expectedStderr = /^$/;
+        let expectedStdout = /^Build started.\nBuild finished. \(\d+ms\)\n$/;
+        //let expectedCode = 0;
+
+        exec(runnerExecWithConfig("./data/success/webpack.config.js") + " --watch", (e, stdout, stderr) => {
+            assert.notEqual(null, stderr.match(expectedStderr), "Unexpected output: " + stderr);
+            assert.notEqual(null, stdout.match(expectedStdout), "Unexpected output: " + stdout);
+            assert.equal(null, e);
+            done();
+        });
+    });
 });
