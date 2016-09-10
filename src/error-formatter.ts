@@ -10,6 +10,10 @@ interface WebpackErrorObject {
         lineNumber: number;
         column: number;
         description: string;
+        loc: {
+            line: number;
+            column: number;
+        }
     }
     dependencies: {
         loc: {
@@ -48,9 +52,9 @@ function formatBuildError(error: WebpackErrorObject) {
     switch (error.name) {
         case 'ModuleParseError':
             filePath = error.module.resource;
-            line = error.error.lineNumber;
-            column = error.error.column;
-            message = error.error.description;
+            line = error.error.loc.line;
+            column = error.error.loc.column;
+            message = error.error.toString();
             break;
 
         case 'ModuleNotFoundError':

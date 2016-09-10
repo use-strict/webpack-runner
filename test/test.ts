@@ -119,4 +119,14 @@ describe('webpack-runner', () => {
             stdout: /^Build started.\nBuild finished. \(\d+ms\)\n[^(]+\(1,18\): error WEBPACK: Error: Cannot resolve \'file\' or \'directory\' \.\/non-existent ([^\n]+)\n[^(]+\(2,19\): error WEBPACK: Error: Cannot resolve \'file\' or \'directory\' \.\/other-missing ([^\n]+)\n$/
         }
     }));
+
+    it ("should output webpack module parse errors", createTest({
+        webpackConfigPath: "./data/module-parse-errors/webpack.config.js",
+        watch: false,
+        expected: {
+            stderr: /^$/,
+            stdout: /^[^(]+\(2,7\): error WEBPACK: SyntaxError: Unexpected token \(2:7\)\n$/,
+            code: 1
+        }
+    }));
 });
