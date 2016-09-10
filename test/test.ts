@@ -14,7 +14,7 @@ interface TestOptions {
 }
 
 let createTest = (options: TestOptions) => (done: MochaDone) => {
-    let runnerExec = "cross-env " + path.resolve(__dirname, "../bin/webpack-runner");
+    let runnerExec = `node "${path.resolve(__dirname, "../bin/webpack-runner")}"`;
     if (options.webpackConfigPath) {
         let realPath = path.resolve(__dirname, options.webpackConfigPath);
         runnerExec += ` --config "${realPath}"`;

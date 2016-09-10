@@ -19,7 +19,6 @@
     "webpack": "^1.9.11"
   },
   "devDependencies": {
-    "cross-env": "^2.0.1",
     "mocha": "^3.0.2",
     "ts-loader": "^0.8.2",
     "typescript": "^2.0.2",
