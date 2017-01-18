@@ -147,7 +147,7 @@ describe('webpack-runner', () => {
         watch: false,
         expected: {
             stderr: /^$/,
-            stdout: /^[^(]+\(2,9\): error TS2322: Type 'number' is not assignable to type 'string'.\n$/,
+            stdout: /^[^(]+\(2,9\): error TS2322: Type '2' is not assignable to type 'string'.\n$/,
             code: 1
         }
     }));

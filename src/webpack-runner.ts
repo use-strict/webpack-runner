@@ -61,11 +61,26 @@ config.watch = !!isWatchMode;
 config.profile = !!isProfile;
 
 // ts-loader specific overrides
-if (!config.ts) {
-    config.ts = {};
+
+if ((webpack as any).LoaderOptionsPlugin) {
+    // Webpack 2 code
+    config.plugins = config.plugins || [];
+    config.plugins.push(new (webpack as any).LoaderOptionsPlugin({
+        options: {
+            ts: {
+                // Prevent unwanted output which would break formatting
+                silent: true
+            }
+        }
+    }));
+} else {
+    // Webpack 1 code
+    if (!config.ts) {
+        config.ts = {};
+    }
+    
+    config.ts.silent = true;
 }
-// Prevent unwanted output which would break formatting
-config.ts.silent = true;
 
 webpack(config, (err, stats) => {
     if (err) {
