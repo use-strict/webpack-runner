@@ -5,6 +5,7 @@
         "noImplicitAny": true,
         "noImplicitReturns": true,
         "noImplicitUseStrict": true,
+        "noImplicitThis": true,
         "sourceMap": false,
         "outDir": "../dist"
     },

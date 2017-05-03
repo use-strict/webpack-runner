@@ -1,5 +1,10 @@
 # Changelog
 
+## v2.0.0
+
+- Added support for webpack multi-target configuration arrays
+- Removed webpack 1.x support
+
 ## v1.3.0
 
 - Added support for webpack 2.2.0+

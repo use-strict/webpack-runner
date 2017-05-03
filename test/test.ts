@@ -63,92 +63,98 @@ describe('webpack-runner', () => {
             code: 1
         }
     }));
+});
 
-    it('should not output anything in non-watch mode if successful', createTest({
-        webpackConfigPath: "./data/success/webpack.config.js",
-        watch: false,
-        expected: {
-            stderr: /^$/,
-            stdout: /^$/,
-            code: 0
-        }
-    }));
+["single-target", "multi-target"].forEach(target => {
+    let targetPath = "./data" + (target === "single-target" ? "" : "/" + target);
 
-    it("should output only the start/stop markers in watch mode if successful", createTest({
-        webpackConfigPath: "./data/success/webpack.config.js",
-        watch: true,
-        expected: {
-            stderr: /^$/,
-            stdout: /^Build started.\nBuild finished. \(\d+ms\)\n$/
-        }
-    }));
+    describe(`webpack-runner (${target})`, () => {
+        it('should not output anything in non-watch mode if successful', createTest({
+            webpackConfigPath: `${targetPath}/success/webpack.config.js`,
+            watch: false,
+            expected: {
+                stderr: /^$/,
+                stdout: /^$/,
+                code: 0
+            }
+        }));
 
-    it("should output fatal webpack errors", createTest({
-        webpackConfigPath: "./data/fatal-webpack-error/webpack.config.js",
-        watch: false,
-        expected: {
-            stderr: /^$/,
-            stdout: /^[^(]+\(1,1\): error WEBPACK: ([^\n]+)\n$/,
-            code: 1
-        }
-    }));
+        it("should output only the start/stop markers in watch mode if successful", createTest({
+            webpackConfigPath: `${targetPath}/success/webpack.config.js`,
+            watch: true,
+            expected: {
+                stderr: /^$/,
+                stdout: /^Build started.\nBuild finished. \(\d+ms\)\n$/
+            }
+        }));
 
-    it("should output fatal webpack errors in watch mode", createTest({
-        webpackConfigPath: "./data/fatal-webpack-error/webpack.config.js",
-        watch: true,
-        expected: {
-            stderr: /^$/,
-            stdout: /^Build started.\nBuild finished. \(\d+ms\)\n[^(]+\(1,1\): error WEBPACK: ([^\n]+)\n$/,
-            code: 1
-        }
-    }));
+        it("should output fatal webpack errors", createTest({
+            webpackConfigPath: `${targetPath}/fatal-webpack-error/webpack.config.js`,
+            watch: false,
+            expected: {
+                stderr: /^$/,
+                stdout: /^[^(]+\(1,1\): error WEBPACK: ([^\n]+)\n$/,
+                code: 1
+            }
+        }));
 
-    it("should output webpack not found module errors", createTest({
-        webpackConfigPath: "./data/module-not-found-errors/webpack.config.js",
-        watch: false,
-        expected: {
-            stderr: /^$/,
-            stdout: /^[^(]+\(1,18\): error WEBPACK: Error: Can(no|')t resolve (\'file\' or \'directory\' )?'?\.\/non-existent'? ([^\n]+)\n[^(]+\(2,19\): error WEBPACK: Error: Can(no|')t resolve (\'file\' or \'directory\' )?'?\.\/other-missing'? ([^\n]+)\n$/,
-            code: 1
-        }
-    }));
+        it("should output fatal webpack errors in watch mode", createTest({
+            webpackConfigPath: `${targetPath}/fatal-webpack-error/webpack.config.js`,
+            watch: true,
+            expected: {
+                stderr: /^$/,
+                stdout: /^Build started.\nBuild finished. \(\d+ms\)\n[^(]+\(1,1\): error WEBPACK: ([^\n]+)\n$/,
+                code: 1
+            }
+        }));
 
-    it("should output webpack module not found errors in watch mode", createTest({
-        webpackConfigPath: "./data/module-not-found-errors/webpack.config.js",
-        watch: true,
-        expected: {
-            stderr: /^$/,
-            stdout: /^Build started.\nBuild finished. \(\d+ms\)\n[^(]+\(1,18\): error WEBPACK: Error: Can(no|')t resolve (\'file\' or \'directory\' )?'?\.\/non-existent'? ([^\n]+)\n[^(]+\(2,19\): error WEBPACK: Error: Can(no|')t resolve (\'file\' or \'directory\' )?\'?.\/other-missing'? ([^\n]+)\n$/
-        }
-    }));
+        it("should output webpack not found module errors", createTest({
+            webpackConfigPath: `${targetPath}/module-not-found-errors/webpack.config.js`,
+            watch: false,
+            expected: {
+                stderr: /^$/,
+                stdout: /^[^(]+\(1,18\): error WEBPACK: Error: Can(no|')t resolve (\'file\' or \'directory\' )?'?\.\/non-existent'? ([^\n]+)\n[^(]+\(2,19\): error WEBPACK: Error: Can(no|')t resolve (\'file\' or \'directory\' )?'?\.\/other-missing'? ([^\n]+)\n$/,
+                code: 1
+            }
+        }));
 
-    it("should output webpack module parse errors", createTest({
-        webpackConfigPath: "./data/module-parse-errors/webpack.config.js",
-        watch: false,
-        expected: {
-            stderr: /^$/,
-            stdout: /^[^(]+\(2,7\): error WEBPACK: SyntaxError: Unexpected token \(2:7\)\n$/,
-            code: 1
-        }
-    }));
+        it("should output webpack module not found errors in watch mode", createTest({
+            webpackConfigPath: `${targetPath}/module-not-found-errors/webpack.config.js`,
+            watch: true,
+            expected: {
+                stderr: /^$/,
+                stdout: /^Build started.\nBuild finished. \(\d+ms\)\n[^(]+\(1,18\): error WEBPACK: Error: Can(no|')t resolve (\'file\' or \'directory\' )?'?\.\/non-existent'? ([^\n]+)\n[^(]+\(2,19\): error WEBPACK: Error: Can(no|')t resolve (\'file\' or \'directory\' )?\'?.\/other-missing'? ([^\n]+)\n$/
+            }
+        }));
 
-    it("should output webpack module build errors", createTest({
-        webpackConfigPath: "./data/module-build-errors/webpack.config.js",
-        watch: false,
-        expected: {
-            stderr: /^$/,
-            stdout: /^[^(]+\(1,1\): error WEBPACK: Module not found: Error: Can(no|')t resolve (\'file\' or \'directory\' )?'?\.\/non-existent'? ([^\n]+)\n$/,
-            code: 1
-        }
-    }));
+        it("should output webpack module parse errors", createTest({
+            webpackConfigPath: `${targetPath}/module-parse-errors/webpack.config.js`,
+            watch: false,
+            expected: {
+                stderr: /^$/,
+                stdout: /^[^(]+\(2,7\): error WEBPACK: SyntaxError: Unexpected token \(2:7\)\n$/,
+                code: 1
+            }
+        }));
 
-    it("should output ts-loader errors", createTest({
-        webpackConfigPath: "./data/ts-loader-errors/webpack.config.js",
-        watch: false,
-        expected: {
-            stderr: /^$/,
-            stdout: /^[^(]+\(2,9\): error TS2322: Type '2' is not assignable to type 'string'.\n$/,
-            code: 1
-        }
-    }));
+        it("should output webpack module build errors", createTest({
+            webpackConfigPath: `${targetPath}/module-build-errors/webpack.config.js`,
+            watch: false,
+            expected: {
+                stderr: /^$/,
+                stdout: /^[^(]+\(1,1\): error WEBPACK: Module not found: Error: Can(no|')t resolve (\'file\' or \'directory\' )?'?\.\/non-existent'? ([^\n]+)\n$/,
+                code: 1
+            }
+        }));
+
+        it("should output ts-loader errors", createTest({
+            webpackConfigPath: `${targetPath}/ts-loader-errors/webpack.config.js`,
+            watch: false,
+            expected: {
+                stderr: /^$/,
+                stdout: /^[^(]+\(2,9\): error TS2322: Type '2' is not assignable to type 'string'.\n$/,
+                code: 1
+            }
+        }));
+    });
 });

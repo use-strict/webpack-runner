@@ -4,11 +4,7 @@ import path = require('path');
 import webpack = require('webpack');
 import {formatErrors, formatGeneralError} from './error-formatter';
 
-interface WebpackConfig extends webpack.Configuration {
-    ts: {
-        silent?: boolean;
-    };
-}
+type WebpackConfig = webpack.Configuration;
 
 let getopt = new Getopt([
     ['C', 'config=ARG', 'Path to webpack config file'],
@@ -32,7 +28,7 @@ let isWatchMode = !!opt.options['watch'];
 let isProfile = !!opt.options['profile'];
 let profilePath = isProfile ? path.resolve(opt.options['profile']) : void 0;
 
-let config: WebpackConfig;
+let config: WebpackConfig | WebpackConfig[];
 try {
     config = require(configPath);
 } catch (e) {
@@ -40,30 +36,57 @@ try {
     process.exit(1);
 }
 
-if (isWatchMode) {
-    let outputPlugin = function() {
-        //this = webpack compiler
-        this.plugin("compile", function(params: {}) {
-            process.stdout.write("Build started.\n");
-        });
-        this.plugin("done", function(stats: any) {
-            process.stdout.write("Build finished. (" + (stats.endTime - stats.startTime) + "ms)\n");
-        });
-        this.plugin("failed", function(error: any) {
-            process.stdout.write("Build finished. (0ms)\n");
-        });
-    };
-    config.plugins = config.plugins || [];
-    config.plugins.push(outputPlugin);
+let runningCount = 0;
+let startTime = 0;
+
+function onWatchCompileEnded() {
+    if (runningCount) {
+        runningCount--;
+    }
+    if (!runningCount) {
+        printBuildFinished();
+    }
 }
 
-config.watch = !!isWatchMode;
-config.profile = !!isProfile;
+function printBuildFinished() {
+    let totalTime = (new Date).getTime() - startTime;
+    process.stdout.write("Build finished. (" + totalTime + "ms)\n");
+}
 
-// ts-loader specific overrides
+let outputPlugin = {
+    apply(compiler: webpack.Compiler) {
+        compiler.plugin("compile", function(params: {}) {
+            if (!runningCount) {
+                startTime = (new Date).getTime();
+                process.stdout.write("Build started.\n");
+            }
+            runningCount++;
+        });
+        compiler.plugin("done", function(stats: any) {
+            onWatchCompileEnded();
+        });
+        compiler.plugin("failed", function(error: any) {
+            onWatchCompileEnded();
+        });
+    }
+};
 
-if ((webpack as any).LoaderOptionsPlugin) {
-    // Webpack 2 code
+if (Array.isArray(config)) {
+    config.forEach(c => applyConfigOverrides(c));
+} else {
+    applyConfigOverrides(config);
+}
+
+function applyConfigOverrides(config: WebpackConfig) {
+    if (isWatchMode) {
+        config.plugins = config.plugins || [];
+        config.plugins.push(outputPlugin);
+    }
+
+    config.watch = !!isWatchMode;
+    config.profile = !!isProfile;
+
+    // ts-loader specific overrides
     config.plugins = config.plugins || [];
     config.plugins.push(new (webpack as any).LoaderOptionsPlugin({
         options: {
@@ -73,24 +96,57 @@ if ((webpack as any).LoaderOptionsPlugin) {
             }
         }
     }));
-} else {
-    // Webpack 1 code
-    if (!config.ts) {
-        config.ts = {};
-    }
-    
-    config.ts.silent = true;
 }
 
-webpack(config, (err, stats) => {
+interface WebpackStats extends webpack.Stats {
+    compilation: {
+        warnings: any[];
+        errors: any[];
+    }
+}
+
+interface WebpackMultiStats extends webpack.Stats {
+    stats: WebpackStats[];
+}
+
+function isMultiStats(stats: WebpackStats | WebpackMultiStats): stats is WebpackMultiStats {
+    return !('compilation' in stats);
+}
+
+function collectWarnings(stats: WebpackStats | WebpackMultiStats) {
+    let warnings: any[] = [];
+    if (isMultiStats(stats)) {
+        stats.stats.forEach(s => warnings = warnings.concat(s.compilation.warnings));
+    } else {
+        warnings = stats.compilation.warnings;
+    }
+    return warnings;
+}
+
+function collectErrors(stats: WebpackStats | WebpackMultiStats) {
+    let errors: any[] = [];
+    if (isMultiStats(stats)) {
+        stats.stats.forEach(s => errors = errors.concat(s.compilation.errors));
+    } else {
+        errors = stats.compilation.errors;
+    }
+    return errors;
+}
+
+webpack(config, (err: Error, stats: WebpackStats | WebpackMultiStats) => {
     if (err) {
+        // Hack: We need to manually print build finished, because the "done/failed" events
+        // don't get triggered with multiple target configs
+        if (isWatchMode && Array.isArray(config)) {
+            printBuildFinished();
+        }
         process.stdout.write(formatGeneralError(configPath, 1, 1, err.message) + "\n");
         process.exit(1);
     }
 
     // Output warnings before errors to ensure errors come up on top in the editor
     if (stats.hasWarnings()) {
-        let warnings: any[] = (stats as any).compilation.warnings;
+        let warnings: any[] = collectWarnings(stats);
         warnings.forEach(function(warning) {
             process.stdout.write(warning.message.trim() + "\n");
         });
@@ -98,7 +154,7 @@ webpack(config, (err, stats) => {
     }
 
     if (stats.hasErrors()) {
-        let errors = formatErrors((stats as any).compilation.errors);
+        let errors = formatErrors(collectErrors(stats));
         errors.forEach(function(error) {
             process.stdout.write(error + "\n");
         });
