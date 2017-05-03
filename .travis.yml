@@ -7,4 +7,3 @@ install:
   - npm install $WEBPACK
 env:
   - WEBPACK=webpack@latest
-  - WEBPACK=webpack@beta
