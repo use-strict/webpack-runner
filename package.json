@@ -1,6 +1,6 @@
 {
   "name": "webpack-runner",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Webpack build wrapper with formatted and normalized error output",
   "bin": "bin/webpack-runner",
   "scripts": {
