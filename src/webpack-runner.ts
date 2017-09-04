@@ -43,9 +43,6 @@ function onWatchCompileEnded() {
     if (runningCount) {
         runningCount--;
     }
-    if (!runningCount) {
-        printBuildFinished();
-    }
 }
 
 function printBuildFinished() {
@@ -135,12 +132,10 @@ function collectErrors(stats: WebpackStats | WebpackMultiStats) {
 
 webpack(config, (err: Error, stats: WebpackStats | WebpackMultiStats) => {
     if (err) {
-        // Hack: We need to manually print build finished, because the "done/failed" events
-        // don't get triggered with multiple target configs
-        if (isWatchMode && Array.isArray(config)) {
+        process.stdout.write(formatGeneralError(configPath, 1, 1, err.message) + "\n");
+        if (isWatchMode) {
             printBuildFinished();
         }
-        process.stdout.write(formatGeneralError(configPath, 1, 1, err.message) + "\n");
         process.exit(1);
     }
 
@@ -162,6 +157,10 @@ webpack(config, (err: Error, stats: WebpackStats | WebpackMultiStats) => {
         if (!isWatchMode) {
             process.exit(1);
         }
+    }
+
+    if (isWatchMode) {
+        printBuildFinished();
     }
 
     if (isProfile) {

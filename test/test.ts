@@ -103,7 +103,7 @@ describe('webpack-runner', () => {
             watch: true,
             expected: {
                 stderr: /^$/,
-                stdout: /^Build started.\nBuild finished. \(\d+ms\)\n[^(]+\(1,1\): error WEBPACK: ([^\n]+)\n$/,
+                stdout: /^Build started.\n[^(]+\(1,1\): error WEBPACK: ([^\n]+)\nBuild finished. \(\d+ms\)\n$/,
                 code: 1
             }
         }));
@@ -123,7 +123,7 @@ describe('webpack-runner', () => {
             watch: true,
             expected: {
                 stderr: /^$/,
-                stdout: /^Build started.\nBuild finished. \(\d+ms\)\n[^(]+\(1,18\): error WEBPACK: Error: Can(no|')t resolve (\'file\' or \'directory\' )?'?\.\/non-existent'? ([^\n]+)\n[^(]+\(2,19\): error WEBPACK: Error: Can(no|')t resolve (\'file\' or \'directory\' )?\'?.\/other-missing'? ([^\n]+)\n$/
+                stdout: /^Build started.\n[^(]+\(1,18\): error WEBPACK: Error: Can(no|')t resolve (\'file\' or \'directory\' )?'?\.\/non-existent'? ([^\n]+)\n[^(]+\(2,19\): error WEBPACK: Error: Can(no|')t resolve (\'file\' or \'directory\' )?\'?.\/other-missing'? ([^\n]+)\nBuild finished. \(\d+ms\)\n$/
             }
         }));
 
