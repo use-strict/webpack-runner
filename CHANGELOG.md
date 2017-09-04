@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.1.1
+
+- Bugfix: Print the "Build finished" marker after printing the list of errors
+
 ## v2.1.0
 
 - Added support for webpack 3+
