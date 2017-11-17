@@ -80,7 +80,8 @@ function formatBuildError(error: WebpackErrorObject) {
             //nobreak
 
         default:
-            if (error.message.match(/(error|warning|info) TS\d+:/)) {
+            if (error.message.match(/(error|warning|info) TS\d+:/) ||
+                error.message.match(/^\[tsl\]/)) {
                 // TypeScript error (ts-loader)
                 let file: string;
                 if (error.file) {
@@ -92,8 +93,8 @@ function formatBuildError(error: WebpackErrorObject) {
                 filePath = file;
                 line = error.location ? error.location.line : 1;
                 column = error.location ? error.location.character : 1;
-                message = error.rawMessage;
-                
+                message = error.rawMessage || "error " + error.message.match(/TS\d+: .*$/)[0];
+
                 return filePath + ' (' + line + ',' + column + '): ' + message;
             }
             
