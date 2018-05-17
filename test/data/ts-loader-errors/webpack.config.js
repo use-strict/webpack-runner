@@ -1,6 +1,7 @@
 var path = require('path');
 
 module.exports = {
+    mode: "none",
     entry: './index',
     context: path.resolve(__dirname),
     output: {
@@ -12,7 +13,7 @@ module.exports = {
         extensions: ['.webpack.js', '.web.js', '.ts', '.tsx', '.js']
     },
     module: {
-        loaders: [
+        rules: [
             // all files with a `.ts` or `.tsx` extension will be handled by `ts-loader`
             { test: /\.tsx?$/, loader: 'ts-loader' }
         ]

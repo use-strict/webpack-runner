@@ -3,7 +3,11 @@
         "target": "es5",
         "module": "commonjs",
         "noImplicitAny": true,
-        "noImplicitReturns": true
+        "noImplicitReturns": true,
+        "lib": [
+            "es5",
+            "es6"
+        ]
     },
     "exclude": [
         "data"

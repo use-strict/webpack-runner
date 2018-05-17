@@ -52,19 +52,28 @@ function printBuildFinished() {
 
 let outputPlugin = {
     apply(compiler: webpack.Compiler) {
-        compiler.plugin("compile", function(params: {}) {
+        let onCompile = function(params: {}) {
             if (!runningCount) {
                 startTime = (new Date).getTime();
                 process.stdout.write("Build started.\n");
             }
             runningCount++;
-        });
-        compiler.plugin("done", function(stats: any) {
+        };
+        let onDone = function(stats: any) {
             onWatchCompileEnded();
-        });
-        compiler.plugin("failed", function(error: any) {
+        };
+        let onFailed = function(error: any) {
             onWatchCompileEnded();
-        });
+        };
+        if (compiler.hooks) {
+            compiler.hooks.compile.tap("webpack-runner", onCompile);
+            compiler.hooks.done.tap("webpack-runner", onDone);
+            compiler.hooks.failed.tap("webpack-runner", onFailed);
+        } else {
+            compiler.plugin("compile", onCompile);
+            compiler.plugin("done", onDone);
+            compiler.plugin("failed", onFailed);
+        }
     }
 };
 
