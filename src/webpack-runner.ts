@@ -65,15 +65,9 @@ let outputPlugin = {
         let onFailed = function(error: any) {
             onWatchCompileEnded();
         };
-        if (compiler.hooks) {
-            compiler.hooks.compile.tap("webpack-runner", onCompile);
-            compiler.hooks.done.tap("webpack-runner", onDone);
-            compiler.hooks.failed.tap("webpack-runner", onFailed);
-        } else {
-            compiler.plugin("compile", onCompile);
-            compiler.plugin("done", onDone);
-            compiler.plugin("failed", onFailed);
-        }
+        compiler.hooks.compile.tap("webpack-runner", onCompile);
+        compiler.hooks.done.tap("webpack-runner", onDone);
+        compiler.hooks.failed.tap("webpack-runner", onFailed);
     }
 };
 

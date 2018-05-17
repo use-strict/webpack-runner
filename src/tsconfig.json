@@ -1,17 +1,13 @@
 {
     "compilerOptions": {
         "module": "commonjs",
-        "target": "es5",
+        "target": "es6",
         "noImplicitAny": true,
         "noImplicitReturns": true,
         "noImplicitUseStrict": true,
         "noImplicitThis": true,
         "sourceMap": false,
-        "outDir": "../dist",
-        "lib": [
-            "es5",
-            "es6"
-        ]
+        "outDir": "../dist"
     },
     "exclude": [
         "node_modules"

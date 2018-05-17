@@ -1,13 +1,9 @@
 {
     "compilerOptions": {
-        "target": "es5",
+        "target": "es6",
         "module": "commonjs",
         "noImplicitAny": true,
-        "noImplicitReturns": true,
-        "lib": [
-            "es5",
-            "es6"
-        ]
+        "noImplicitReturns": true
     },
     "exclude": [
         "data"

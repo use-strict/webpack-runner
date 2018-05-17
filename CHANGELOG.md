@@ -3,6 +3,7 @@
 ## v2.3.0
 
 - Added support for webpack 4+ and ts-loader 4+
+- Removed webpack 2.x support
 
 ## v2.2.0
 
