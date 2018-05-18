@@ -1,5 +1,9 @@
 # Changelog
 
+## v3.0.1
+
+- Fixed format of ts-loader errors when using a color terminal
+
 ## v3.0.0
 
 - Added support for webpack 4+ and ts-loader 4+
