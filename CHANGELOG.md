@@ -4,6 +4,7 @@
 
 - Added support for webpack 4+ and ts-loader 4+
 - Removed webpack 2.x support
+- Increased minimum NodeJS version requirement to 8
 
 ## v2.2.0
 
