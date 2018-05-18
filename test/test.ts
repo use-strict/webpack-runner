@@ -27,6 +27,7 @@ let createTest = (options: TestOptions) => function(done: MochaDone) {
     let timeout = options.watch ? 2000 : 10000;
     this.timeout(timeout);
     let runner = exec(runnerExec, {timeout: timeout - 100, killSignal: "SIGTERM"}, (e, stdout, stderr) => {
+        // console.log("Output:\n----\n" + stdout + "\n----\n");
         assert.notEqual(null, stderr.match(expected.stderr), `Unexpected stderr: "${stderr}"`);
         assert.notEqual(null, stdout.match(expected.stdout), `Unexpected stdout: "${stdout}"`);
         if (expected.code !== void 0) {
@@ -93,7 +94,7 @@ describe('webpack-runner', () => {
             watch: false,
             expected: {
                 stderr: /^$/,
-                stdout: /^[^(]+\(1,1\): error WEBPACK: ([^\n]+)\n$/,
+                stdout: /^(\/)|([A-Z]:\\)[^(]+\(1,1\): error WEBPACK: ([^\n]+)\n$/,
                 code: 1
             }
         }));
@@ -113,7 +114,7 @@ describe('webpack-runner', () => {
             watch: false,
             expected: {
                 stderr: /^$/,
-                stdout: /^[^(]+\(1,18\): error WEBPACK: Error: Can(no|')t resolve (\'file\' or \'directory\' )?'?\.\/non-existent'? ([^\n]+)\n[^(]+\(2,19\): error WEBPACK: Error: Can(no|')t resolve (\'file\' or \'directory\' )?'?\.\/other-missing'? ([^\n]+)\n$/,
+                stdout: /^(\/)|([A-Z]:\\)[^(]+\(1,18\): error WEBPACK: Error: Can(no|')t resolve (\'file\' or \'directory\' )?'?\.\/non-existent'? ([^\n]+)\n[^(]+\(2,19\): error WEBPACK: Error: Can(no|')t resolve (\'file\' or \'directory\' )?'?\.\/other-missing'? ([^\n]+)\n$/,
                 code: 1
             }
         }));
@@ -132,7 +133,7 @@ describe('webpack-runner', () => {
             watch: false,
             expected: {
                 stderr: /^$/,
-                stdout: /^[^(]+\(2,7\): error WEBPACK: SyntaxError: Unexpected token \(2:7\)\n$/,
+                stdout: /^(\/)|([A-Z]:\\)[^(]+\(2,7\): error WEBPACK: SyntaxError: Unexpected token \(2:7\)\n$/,
                 code: 1
             }
         }));
@@ -142,7 +143,7 @@ describe('webpack-runner', () => {
             watch: false,
             expected: {
                 stderr: /^$/,
-                stdout: /^[^(]+\(1,1\): error WEBPACK: Module not found: Error: Can(no|')t resolve (\'file\' or \'directory\' )?'?\.\/non-existent'? ([^\n]+)\n$/,
+                stdout: /^(\/)|([A-Z]:\\)[^(]+\(1,1\): error WEBPACK: Module not found: Error: Can(no|')t resolve (\'file\' or \'directory\' )?'?\.\/non-existent'? ([^\n]+)\n$/,
                 code: 1
             }
         }));
@@ -152,7 +153,7 @@ describe('webpack-runner', () => {
             watch: false,
             expected: {
                 stderr: /^$/,
-                stdout: /^[^(]+\(2,9\): error TS2322: Type '2' is not assignable to type 'string'.\n$/,
+                stdout: /^(\/)|([A-Z]:\\)[^(]+\(2,9\): error TS2322: Type '2' is not assignable to type 'string'.\n$/,
                 code: 1
             }
         }));

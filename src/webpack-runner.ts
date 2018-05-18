@@ -113,6 +113,10 @@ function isMultiStats(stats: WebpackStats | WebpackMultiStats): stats is Webpack
     return !('compilation' in stats);
 }
 
+function isMultiConfig(config: WebpackConfig | WebpackConfig[]): config is WebpackConfig[] {
+    return typeof (config as WebpackConfig[]).length !== "undefined";
+}
+
 function collectWarnings(stats: WebpackStats | WebpackMultiStats) {
     let warnings: any[] = [];
     if (isMultiStats(stats)) {
@@ -133,7 +137,7 @@ function collectErrors(stats: WebpackStats | WebpackMultiStats) {
     return errors;
 }
 
-webpack(config, (err: Error, stats: WebpackStats | WebpackMultiStats) => {
+function handler(err: Error, stats: WebpackStats | WebpackMultiStats) {
     if (err) {
         process.stdout.write(formatGeneralError(configPath, 1, 1, err.message) + "\n");
         if (isWatchMode) {
@@ -174,4 +178,10 @@ webpack(config, (err: Error, stats: WebpackStats | WebpackMultiStats) => {
     if (!isWatchMode) {
         process.exit(0);
     }
-});
+};
+
+if (isMultiConfig(config)) {
+    webpack(config, handler);
+} else {
+    webpack(config, handler);
+}
