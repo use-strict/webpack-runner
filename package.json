@@ -26,6 +26,7 @@
     "@types/mocha": "^2.2.41",
     "@types/node": "^8.10.15",
     "@types/node-getopt": "0.2.29",
+    "@types/strip-ansi": "^3.0.0",
     "@types/webpack": "^4.1.7",
     "mocha": "^3.0.2",
     "ts-loader": "^4.3.0",
@@ -33,6 +34,7 @@
     "webpack": "^4.8.3"
   },
   "dependencies": {
-    "node-getopt": "^0.2.3"
+    "node-getopt": "^0.2.3",
+    "strip-ansi": "^4.0.0"
   }
 }

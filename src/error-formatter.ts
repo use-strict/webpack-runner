@@ -1,7 +1,10 @@
+import stripAnsi = require("strip-ansi");
+
 interface WebpackErrorObject {
     name: string;
     message: string;
     rawMessage: string;
+    loaderSource: string;
     file: string;
     module: {
         resource: string;
@@ -80,24 +83,22 @@ function formatBuildError(error: WebpackErrorObject) {
             //nobreak
 
         default:
-            if (error.message.match(/(error|warning|info) TS\d+:/) ||
-                error.message.match(/^\[tsl\]/)) {
-                // TypeScript error (ts-loader)
+            if (error.loaderSource === "ts-loader") {
                 let file: string;
                 if (error.file) {
                     file = error.file;
                 } else if (error.module && error.module.resource) {
                     file = error.module.resource;
                 }
-                
+
                 filePath = file;
                 line = error.location ? error.location.line : 1;
                 column = error.location ? error.location.character : 1;
-                message = error.rawMessage || "error " + error.message.match(/TS\d+: .*$/)[0];
+                message = error.rawMessage || "error " + stripAnsi(error.message).match(/TS\d+: .*$/)[0];
 
                 return filePath + ' (' + line + ',' + column + '): ' + message;
             }
-            
+
             return 'Unhandled error type `' + error.name + '`: ' + error.message;
     }
 

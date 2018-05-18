@@ -85,17 +85,6 @@ function applyConfigOverrides(config: WebpackConfig) {
 
     config.watch = !!isWatchMode;
     config.profile = !!isProfile;
-
-    // ts-loader specific overrides
-    config.plugins = config.plugins || [];
-    config.plugins.push(new (webpack as any).LoaderOptionsPlugin({
-        options: {
-            ts: {
-                // Prevent unwanted output which would break formatting
-                silent: true
-            }
-        }
-    }));
 }
 
 interface WebpackStats extends webpack.Stats {
