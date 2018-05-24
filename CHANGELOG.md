@@ -1,5 +1,9 @@
 # Changelog
 
+## v3.0.3
+
+- Fixed error when building with node < 8.11 by replacing unsupported RegExp 's' flag
+
 ## v3.0.2
 
 - Fixed formatting of ts-loader errors containing newlines
