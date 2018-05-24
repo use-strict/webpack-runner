@@ -1,5 +1,9 @@
 # Changelog
 
+## v3.0.2
+
+- Fixed formatting of ts-loader errors containing newlines
+
 ## v3.0.1
 
 - Fixed format of ts-loader errors when using a color terminal

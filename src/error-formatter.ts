@@ -94,7 +94,7 @@ function formatBuildError(error: WebpackErrorObject) {
                 filePath = file;
                 line = error.location ? error.location.line : 1;
                 column = error.location ? error.location.character : 1;
-                message = error.rawMessage || "error " + stripAnsi(error.message).match(/TS\d+: .*$/)[0];
+                message = error.rawMessage || "error " + stripAnsi(error.message).match(/TS\d+: .*$/s)[0];
 
                 return filePath + ' (' + line + ',' + column + '): ' + message;
             }
