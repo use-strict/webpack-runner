@@ -1,5 +1,9 @@
 # Changelog
 
+## v3.1.0
+
+- Added support for fork-ts-checker-webpack-plugin errors and warnings
+
 ## v3.0.3
 
 - Fixed error when building with node < 8.11 by replacing unsupported RegExp 's' flag

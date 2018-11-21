@@ -99,6 +99,21 @@ function formatBuildError(error: WebpackErrorObject) {
                 return filePath + ' (' + line + ',' + column + '): ' + message;
             }
 
+            if (error.rawMessage && error.file && error.location) {
+                // Looks like a standard error object
+                filePath = error.file;
+                line = error.location.line;
+                column = error.location.character;
+                // This treats fork-ts-checker errors nicely
+                let match = error.rawMessage.match(/^error ([a-z0-9-_]+: [\s\S]*)$/i);
+                if (match) {
+                    message = "error " + match[1];
+                    return filePath + ' (' + line + ',' + column + '): ' + message;
+                }
+                message = error.rawMessage;
+                break;
+            }
+
             return 'Unhandled error type `' + error.name + '`: ' + error.message;
     }
 

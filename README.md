@@ -67,7 +67,7 @@ Example tasks.json:
                 // The actual pattern to match problems in the output.
                 "pattern": {
                     // The regular expression. Matches HelloWorld.ts(2,10): error TS2339: Property 'logg' does not exist on type 'Console'.
-                    "regexp": "^([^\\s].*)\\((\\d+|\\d+,\\d+|\\d+,\\d+,\\d+,\\d+)\\):\\s+(error|warning|info)\\s+(TSLINT|WEBPACK|TS\\d+)\\s*:\\s*(.*)$",
+                    "regexp": "^([^\\s].*)\\((\\d+|\\d+,\\d+|\\d+,\\d+,\\d+,\\d+)\\):\\s+(error|warning|info)\\s+([A-Za-z0-9-_]+)\\s*:\\s*(.*)$",
                     // The match group that denotes the file containing the problem.
                     "file": 1,
                     // The match group that denotes the problem location.

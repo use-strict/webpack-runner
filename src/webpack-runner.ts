@@ -3,6 +3,7 @@ import fs = require('fs');
 import path = require('path');
 import webpack = require('webpack');
 import {formatErrors, formatGeneralError} from './error-formatter';
+import { formatWarnings } from './warning-formatter';
 
 type WebpackConfig = webpack.Configuration;
 
@@ -137,9 +138,9 @@ function handler(err: Error, stats: WebpackStats | WebpackMultiStats) {
 
     // Output warnings before errors to ensure errors come up on top in the editor
     if (stats.hasWarnings()) {
-        let warnings: any[] = collectWarnings(stats);
+        let warnings = formatWarnings(collectWarnings(stats));
         warnings.forEach(function(warning) {
-            process.stdout.write(warning.message.trim() + "\n");
+            process.stdout.write(warning + "\n");
         });
 
     }

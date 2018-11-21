@@ -157,5 +157,15 @@ describe('webpack-runner', () => {
                 code: 1
             }
         }));
+
+        it("should output fork-ts-checker errors/warnings", createTest({
+            webpackConfigPath: `${targetPath}/fork-ts-checker-messages/webpack.config.js`,
+            watch: false,
+            expected: {
+                stderr: /^$/,
+                stdout: /^(\/)|([A-Z]:)(\\|\/)[^(]+\(3,12\): warning no-inferrable-types: Type number trivially inferred from a number literal, remove type annotation\n((\/)|([A-Z]:)(\\|\/))[^(]+\(2,9\): error TS2322: Type '2' is not assignable to type 'string'.\n$/,
+                code: 1
+            }
+        }));
     });
 });

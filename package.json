@@ -28,8 +28,10 @@
     "@types/node-getopt": "0.2.29",
     "@types/strip-ansi": "^3.0.0",
     "@types/webpack": "^4.1.7",
+    "fork-ts-checker-webpack-plugin": "^0.4.15",
     "mocha": "^3.0.2",
     "ts-loader": "^4.3.0",
+    "tslint": "^5.11.0",
     "typescript": "^2.8.3",
     "webpack": "^4.8.3"
   },

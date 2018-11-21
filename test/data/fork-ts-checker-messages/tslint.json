@@ -1,0 +1,6 @@
+{
+    "defaultSeverity": "warn",
+    "rules": {
+        "no-inferrable-types": true
+    }
+}
