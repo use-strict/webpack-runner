@@ -1,5 +1,9 @@
 # Changelog
 
+## v3.1.1
+
+- Require webpack 4 in peer dependencies as webpack 5 introduces breaking changes
+
 ## v3.1.0
 
 - Added support for fork-ts-checker-webpack-plugin errors and warnings
