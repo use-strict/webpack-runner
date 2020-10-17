@@ -20,7 +20,7 @@
   "author": "Alexandru Ciuca",
   "license": "MIT",
   "peerDependencies": {
-    "webpack": ">=4.0.0"
+    "webpack": "^4.0.0"
   },
   "devDependencies": {
     "@types/mocha": "^2.2.41",
