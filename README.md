@@ -1,6 +1,10 @@
 [![Build Status](https://travis-ci.org/use-strict/webpack-runner.svg?branch=master)](https://travis-ci.org/use-strict/webpack-runner)
 [![npm version](https://badge.fury.io/js/webpack-runner.svg)](https://badge.fury.io/js/webpack-runner)
 
+# DEPRECATION NOTICE
+
+This package is deprecated. It is no longer needed, as the same functionality can now be achieved with a VSCode extension. See [VSCode configuration example for fork-ts-checker-webpack-plugin](https://github.com/TypeStrong/fork-ts-checker-webpack-plugin/tree/master/examples/vscode-tasks) and [TypeScript + Webpack Problem Matchers](https://marketplace.visualstudio.com/items?itemName=eamodio.tsl-problem-matcher).
+
 # Introduction
 
 Webpack runner is a simple CLI tool that acts as a webpack build wrapper.
