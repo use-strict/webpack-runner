@@ -37,6 +37,6 @@
   },
   "dependencies": {
     "node-getopt": "^0.2.3",
-    "strip-ansi": "^4.0.0"
+    "strip-ansi": "^7.0.0"
   }
 }
